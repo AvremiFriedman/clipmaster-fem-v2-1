@@ -1,5 +1,10 @@
 import React from 'react';
 import { render } from 'react-dom';
+import { clipboard } from 'electron';
+
+const writeToClipboard = content => {
+  clipboard.writeText(content);
+}
 
 class Application extends React.Component {
 
@@ -19,14 +24,22 @@ class Application extends React.Component {
 
   addClipping() {
     const { clippings } = this.state;
-    this.setState({ clippings: [{ content: 'lol', id: Date.now() }, ...clippings] })
+
+    const content = clipboard.readText();
+    const id = Date.now();
+
+    const clipping = { content, id };
+
+    this.setState({
+      clippings: [clipping, ...clippings],
+    });
   }
 
   render() {
     return (
       <div className="container">
         <header className="controls">
-          <button id="copi-from-clipboard" onClick={this.addClipping}>Copy from Clipboard</button>
+          <button id="copy-from-clipboard" onClick={this.addClipping}>Copy from Clipboard</button>
         </header>
 
         <section className="content">
@@ -48,7 +61,7 @@ const Clipping = ({ content }) => {
         {content}
       </div>
       <div className="clipping-controls">
-        <button>&rarr; Clipboard</button>
+        <button onClick={() => writeToClipboard(content)}>&rarr; Clipboard</button>
         <button>Update</button>
       </div>
     </article>
