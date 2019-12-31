@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { clipboard } from 'electron';
+import { clipboard, ipcRenderer } from 'electron';
 
 const writeToClipboard = content => {
   clipboard.writeText(content);
@@ -20,7 +20,13 @@ class Application extends React.Component {
     };
 
     this.addClipping = this.addClipping.bind(this);
+    this.handleWriteToClipboard = this.handleWriteToClipboard.bind(this);
   };
+
+  componentDidMount() {
+    ipcRenderer.on('create-new-clipping', this.addClipping);
+    ipcRenderer.on('write-to-clipboard', this.handleWriteToClipboard)
+  }
 
   addClipping() {
     const { clippings } = this.state;
@@ -33,6 +39,11 @@ class Application extends React.Component {
     this.setState({
       clippings: [clipping, ...clippings],
     });
+  }
+
+  handleWriteToClipboard() {
+    const clipping = this.state.clippings[0];
+    if(clipping) writeToClipboard(clipping.content);
   }
 
   render() {
