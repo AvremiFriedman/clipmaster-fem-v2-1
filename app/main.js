@@ -1,8 +1,7 @@
 /* eslint-disable no-console */
-import { app, globalShortcut } from 'electron';
+import { app, globalShortcut, Menu } from 'electron';
 
 import Menubar from 'menubar';
-
 
 let mainWindow;
 
@@ -12,6 +11,18 @@ const menubar = Menubar({
 });
 
 menubar.on('ready', () => {
+  const secondaryMenu = Menu.buildFromTemplate([{
+    label: 'Quit',
+    click() {
+      menubar.app.quit();
+    },
+    accelator: 'CommandOrControl+q',
+  }]);
+
+  menubar.tray.on('right-click', () => {
+    menubar.tray.popUpContextMenu(secondaryMenu);
+  });
+
   const createClippingShortcut = globalShortcut.register(
     'CommandOrControl+!',
     () => {

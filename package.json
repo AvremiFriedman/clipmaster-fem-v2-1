@@ -51,7 +51,7 @@
     "electron-rebuild": "^1.8.8",
     "electron-squirrel-startup": "^1.0.0",
     "knex": "^0.20.6",
-    "menubar": "^7.1.0",
+    "menubar": "^5.2.3",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
     "sqlite3": "^4.1.1"
